@@ -31,16 +31,16 @@ def return_home():
 def generate_text():
     data = request.get_json()
     prompt = data.get('prompt', '')
-
+    system_prompt = os.getenv("SYSTEM_PROMPT")
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo", # model
             messages=[ # role of model and user
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=100,
-            temperature=0.9
+            max_tokens=250,
+            temperature=0.7
         )
         generated_text = response.choices[0].message.content
         return jsonify({'generated_text': generated_text})
